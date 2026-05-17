@@ -38,7 +38,7 @@ defmodule PoolsimCoreEx do
 
     case Native.simulate(workload_json, pool_json, options_json) do
       {:ok, json} ->
-        {:ok, json |> Jason.decode!(keys: :atoms!) |> build_simulation_report()}
+        {:ok, json |> Jason.decode!(keys: :atoms) |> build_simulation_report()}
 
       {:error, json} ->
         {:error, json |> Jason.decode!() |> build_error()}
@@ -56,7 +56,7 @@ defmodule PoolsimCoreEx do
 
     case Native.evaluate(workload_json, pool_size, options_json) do
       {:ok, json} ->
-        {:ok, json |> Jason.decode!(keys: :atoms!) |> build_evaluation_result()}
+        {:ok, json |> Jason.decode!(keys: :atoms) |> build_evaluation_result()}
 
       {:error, json} ->
         {:error, json |> Jason.decode!() |> build_error()}
@@ -77,7 +77,7 @@ defmodule PoolsimCoreEx do
       {:ok, json} ->
         rows =
           json
-          |> Jason.decode!(keys: :atoms!)
+          |> Jason.decode!(keys: :atoms)
           |> Enum.map(&build_sensitivity_row/1)
 
         {:ok, rows}
@@ -193,6 +193,6 @@ defmodule PoolsimCoreEx do
     %Error{code: code, message: message, details: details}
   end
 
-  defp enum_atom(value) when is_binary(value), do: String.to_existing_atom(value)
+  defp enum_atom(value) when is_binary(value), do: String.to_atom(value)
   defp enum_atom(value) when is_atom(value), do: value
 end
